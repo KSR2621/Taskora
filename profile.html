@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Taskora</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --neon-blue: #00f3ff;
+            --cyber-purple: #bc13fe;
+            --matrix-green: #00ff41;
+            --dark-bg: #0a0a0f;
+            --card-bg: rgba(15, 15, 25, 0.9);
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --gradient-1: linear-gradient(135deg, var(--neon-blue), var(--cyber-purple));
+            --gradient-2: linear-gradient(45deg, var(--matrix-green), var(--neon-blue));
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: 16px;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            background: var(--dark-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gradient-1);
+            border-radius: 4px;
+        }
+
+        .glow {
+            text-shadow: 0 0 10px var(--neon-blue),
+                         0 0 20px var(--neon-blue),
+                         0 0 30px var(--neon-blue);
+            animation: glitch 1.5s linear infinite alternate;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes glitch {
+            0%, 100% { text-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue), 0 0 30px var(--neon-blue); }
+            50% { text-shadow: 0 0 5px var(--cyber-purple), 2px 2px 15px var(--matrix-green); }
+        }
+
+        .gradient-text {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            backdrop-filter: blur(10px);
+            background: rgba(10, 10, 15, 0.95);
+            border-bottom: 1px solid rgba(0, 243, 255, 0.1);
+            z-index: 1000;
+            padding: 0.8rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            flex-grow: 1;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            position: relative;
+            padding: 0.3rem 0;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-shadow: 0 0 5px rgba(0, 243, 255, 0.2);
+            font-size: 1rem;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-1);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .auth-buttons button {
+            padding: 0.5rem 1.5rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            background: var(--gradient-1);
+            color: var(--dark-bg);
+            border: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+        }
+
+        .auth-buttons button:hover {
+            background: var(--gradient-2);
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--neon-blue);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-menu-btn:hover {
+            color: var(--matrix-green);
+        }
+
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            background: var(--card-bg);
+            padding: 1rem;
+            flex-direction: column;
+            gap: 1rem;
+            z-index: 999;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .mobile-nav.active {
+            display: flex;
+        }
+
+        .mobile-nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 5px rgba(0, 243, 255, 0.2);
+        }
+
+        .mobile-nav a:hover {
+            background: rgba(0, 243, 255, 0.1);
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .profile-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.1);
+        }
+
+        h2, h3, h4 {
+            color: var(--neon-blue);
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+        }
+
+        h2::after, h3::after, h4::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--gradient-1);
+            border-radius: 2px;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(20, 20, 30, 0.8);
+            border-radius: 0.75rem;
+            border: 1px solid rgba(0, 243, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.05);
+        }
+
+        .project-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .project-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: rgba(15, 15, 25, 0.7);
+            border-radius: 0.5rem;
+            border: 1px solid rgba(0, 243, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .project-item:hover {
+            background: rgba(15, 15, 25, 0.9);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+        }
+
+        .project-info {
+            flex: 1;
+        }
+
+        .project-name {
+            font-weight: 600;
+            color: var(--neon-blue);
+            margin-bottom: 0.25rem;
+            text-shadow: 0 0 5px rgba(0, 243, 255, 0.2);
+        }
+
+        .project-company {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .project-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .skill-tag {
+            background: rgba(0, 243, 255, 0.1);
+            color: var(--neon-blue);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            box-shadow: 0 0 5px rgba(0, 243, 255, 0.2);
+        }
+
+        .project-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .project-actions button {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: none;
+            transition: all 0.3s ease;
+            color: var(--dark-bg);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+        }
+
+        .view-btn {
+            background: var(--gradient-1);
+        }
+
+        .view-btn:hover {
+            background: var(--gradient-2);
+            transform: translateY(-2px);
+        }
+
+        .withdraw-btn {
+            background: linear-gradient(135deg, #ff4d4d, #ff1a1a);
+        }
+
+        .withdraw-btn:hover {
+            background: linear-gradient(135deg, #ff1a1a, #ff4d4d);
+            transform: translateY(-2px);
+        }
+
+        .delete-btn {
+            background: linear-gradient(135deg, #ff4d4d, #ff1a1a);
+        }
+
+        .delete-btn:hover {
+            background: linear-gradient(135deg, #ff1a1a, #ff4d4d);
+            transform: translateY(-2px);
+        }
+
+        .complete-btn {
+            background: var(--gradient-2);
+        }
+
+        .complete-btn:hover {
+            background: var(--gradient-1);
+            transform: translateY(-2px);
+        }
+
+        .no-projects {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .edit-btn, .back-btn {
+            background: var(--gradient-1);
+            color: var(--dark-bg);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+        }
+
+        .edit-btn:hover, .back-btn:hover {
+            background: var(--gradient-2);
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
+        }
+
+        .user-details {
+            margin-bottom: 1rem;
+        }
+
+        .user-details p {
+            margin: 0.5rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .profile-container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+
+            .project-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .project-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">Taskora</div>
+        <button class="mobile-menu-btn" aria-label="Toggle mobile menu" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="index.html">Projects</a>
+            <a href="available-talent.html">Talent</a>
+            <a href="community.html">Community</a>
+        </div>
+        <div class="auth-buttons">
+            <button id="logoutBtn">Logout</button>
+        </div>
+    </nav>
+
+    <div class="mobile-nav" id="mobileNav">
+        <a href="index.html">Home</a>
+        <a href="index.html">Projects</a>
+        <a href="available-talent.html">Talent</a>
+        <a href="community.html">Community</a>
+    </div>
+
+    <div class="profile-container fade-in">
+        <h2 class="glow">Profile</h2>
+
+        <div class="section fade-in delay-1" id="personalInfo">
+            <h3 id="infoTitle" class="gradient-text"></h3>
+            <div id="infoDetails" class="user-details"></div>
+            <!-- <button class="edit-btn" id="editProfileBtn">Edit Profile</button> -->
+        </div>
+
+        <!-- Creator Sections -->
+        <div class="section fade-in delay-2" id="pastProjects" style="display: none;">
+            <h3 class="gradient-text">Past Projects</h3>
+            <ul id="pastProjectsList" class="project-list"></ul>
+        </div>
+
+        <div class="section fade-in delay-2" id="currentProjects" style="display: none;">
+            <h3 class="gradient-text">Current Projects</h3>
+            <ul id="currentProjectsList" class="project-list"></ul>
+        </div>
+
+        <div class="section fade-in delay-2" id="appliedProjects" style="display: none;">
+            <h3 class="gradient-text">Applied Projects</h3>
+            <ul id="appliedProjectsList" class="project-list"></ul>
+        </div>
+
+        <!-- Innovator Sections -->
+        <div class="section fade-in delay-2" id="uploadedProjects" style="display: none;">
+            <h3 class="gradient-text">My Projects</h3>
+            <div class="subsection" id="openProjects">
+                <h4 class="gradient-text">Open Projects</h4>
+                <ul id="openProjectsList" class="project-list"></ul>
+            </div>
+            <div class="subsection" id="inProgressProjects">
+                <h4 class="gradient-text">In Progress Projects</h4>
+                <ul id="inProgressProjectsList" class="project-list"></ul>
+            </div>
+            <div class="subsection" id="completedProjects">
+                <h4 class="gradient-text">Completed Projects</h4>
+                <ul id="completedProjectsList" class="project-list"></ul>
+            </div>
+        </div>
+
+        <button class="back-btn fade-in delay-3" id="backBtn">Back</button>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+        import { getAuth, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+        import { getDatabase, ref, get, update, remove } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+    
+        const firebaseConfig = {
+            apiKey: "AIzaSyD0wtET8bTtw_133RE4rWZiRFGESfbDtC0",
+            authDomain: "student-startup-connect.firebaseapp.com",
+            databaseURL: "https://student-startup-connect-default-rtdb.firebaseio.com",
+            projectId: "student-startup-connect",
+            storageBucket: "student-startup-connect.appspot.com",
+            messagingSenderId: "570854385529",
+            appId: "1:570854385529:web:e45e5076a0cbcb9a56f1a8",
+            measurementId: "G-T5PMGL8K26"
+        };
+    
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const database = getDatabase(app);
+    
+        // Mobile menu functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileNav = document.getElementById('mobileNav');
+            const logoutBtn = document.getElementById('logoutBtn');
+    
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileNav.classList.toggle('active');
+            });
+    
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', async () => {
+                    try {
+                        await signOut(auth);
+                        localStorage.clear();
+                        window.location.href = 'login.html';
+                    } catch (error) {
+                        console.error('Error logging out:', error);
+                        alert('Error logging out: ' + error.message);
+                    }
+                });
+            }
+    
+            document.addEventListener('click', (e) => {
+                if (!mobileNav.contains(e.target) && e.target !== mobileMenuBtn) {
+                    mobileNav.classList.remove('active');
+                }
+            });
+    
+            const fadeElements = document.querySelectorAll('.fade-in');
+            const fadeInOnScroll = () => {
+                fadeElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    if (elementTop < windowHeight - 100) {
+                        element.classList.add('visible');
+                    }
+                });
+            };
+            window.addEventListener('scroll', fadeInOnScroll);
+            window.addEventListener('load', fadeInOnScroll);
+            fadeInOnScroll();
+        });
+    
+        // Load creator projects
+        async function loadCreatorProjects(userId) {
+            try {
+                const projectsRef = ref(database, 'projects');
+                const projectsSnapshot = await get(projectsRef);
+                const applicationsRef = ref(database, 'applications');
+                const applicationsSnapshot = await get(applicationsRef);
+    
+                const pastProjects = [];
+                const currentProjects = [];
+                const appliedProjects = [];
+    
+                // Handle projects
+                if (projectsSnapshot.exists()) {
+                    const allProjects = projectsSnapshot.val();
+                    Object.entries(allProjects).forEach(([id, project]) => {
+                        if (project.assignedTo === userId) {
+                            if (project.status === 'Completed') {
+                                pastProjects.push({ id, ...project });
+                            } else if (project.status === 'In Progress') {
+                                currentProjects.push({ id, ...project });
+                            }
+                        }
+                    });
+                }
+    
+                // Handle applications
+                if (applicationsSnapshot.exists()) {
+                    const applications = applicationsSnapshot.val();
+                    const appliedProjectIds = Object.entries(applications)
+                        .filter(([_, app]) => app.studentId === userId)
+                        .map(([_, app]) => app.projectId);
+    
+                    if (projectsSnapshot.exists()) {
+                        const allProjects = projectsSnapshot.val();
+                        appliedProjectIds.forEach(projectId => {
+                            if (allProjects[projectId] && allProjects[projectId].status === 'Open') {
+                                appliedProjects.push({ id: projectId, ...allProjects[projectId] });
+                            }
+                        });
+                    }
+                }
+    
+                // Render projects
+                renderProjects('pastProjectsList', pastProjects, false);
+                renderProjects('currentProjectsList', currentProjects, false);
+                renderProjects('appliedProjectsList', appliedProjects, true);
+    
+                if (pastProjects.length === 0 && currentProjects.length === 0 && appliedProjects.length === 0) {
+                    showNoProjects();
+                }
+    
+            } catch (error) {
+                console.error('Error loading creator projects:', error);
+                showError();
+            }
+        }
+    
+        // Load innovator projects
+        async function loadInnovatorProjects(userId) {
+            try {
+                const projectsRef = ref(database, 'projects');
+                const snapshot = await get(projectsRef);
+                if (!snapshot.exists()) {
+                    showNoProjects();
+                    return;
+                }
+    
+                const allProjects = snapshot.val();
+                const innovatorProjects = Object.entries(allProjects)
+                    .filter(([id, project]) => project.postedBy === userId || project.startupId === userId)
+                    .map(([id, project]) => ({ id, ...project }));
+    
+                const openProjects = innovatorProjects.filter(p => p.status === 'Open');
+                const inProgressProjects = innovatorProjects.filter(p => p.status === 'In Progress');
+                const completedProjects = innovatorProjects.filter(p => p.status === 'Completed');
+    
+                renderProjects('openProjectsList', openProjects, true, true);
+                renderProjects('inProgressProjectsList', inProgressProjects, true);
+                renderProjects('completedProjectsList', completedProjects, false);
+    
+            } catch (error) {
+                console.error('Error loading innovator projects:', error);
+                showError();
+            }
+        }
+    
+        // Render projects
+        function renderProjects(listId, projects, showWithdraw = false, showDelete = false) {
+            const listElement = document.getElementById(listId);
+            if (!projects || projects.length === 0) {
+                listElement.innerHTML = '<li class="no-projects">No projects found</li>';
+                return;
+            }
+    
+            listElement.innerHTML = projects.map(project => `
+                <li class="project-item">
+                    <div class="project-info">
+                        <div class="project-name">${project.projectTitle || 'Untitled'}</div>
+                        <div class="project-company">${project.startup || 'No company'}</div>
+                        <div class="project-skills">
+                            ${project.skills ? project.skills.split(',').slice(0, 3).map(skill => 
+                                `<span class="skill-tag">${skill.trim()}</span>`
+                            ).join('') : '<span class="skill-tag">No skills</span>'}
+                        </div>
+                    </div>
+                    <div class="project-actions">
+                        <button class="view-btn" data-project-id="${project.id}">View</button>
+                        ${showWithdraw ? `<button class="withdraw-btn" data-project-id="${project.id}">Withdraw</button>` : ''}
+                        ${showDelete ? `<button class="delete-btn" data-project-id="${project.id}">Delete</button>` : ''}
+                        ${!showWithdraw && !showDelete && project.status === 'In Progress' ? 
+                          `<button class="complete-btn" data-project-id="${project.id}">Complete</button>` : ''}
+                    </div>
+                </li>
+            `).join('');
+    
+            document.querySelectorAll(`#${listId} .view-btn`).forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const projectId = e.target.dataset.projectId;
+                    window.location.href = `project-details.html?id=${projectId}`;
+                });
+            });
+    
+            document.querySelectorAll(`#${listId} .withdraw-btn`).forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    if (confirm('Withdraw application?')) {
+                        await withdrawApplication(userId, e.target.dataset.projectId);
+                    }
+                });
+            });
+    
+            document.querySelectorAll(`#${listId} .delete-btn`).forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    if (confirm('Delete this project?')) {
+                        await remove(ref(database, `projects/${e.target.dataset.projectId}`));
+                        loadInnovatorProjects(userId);
+                    }
+                });
+            });
+    
+            document.querySelectorAll(`#${listId} .complete-btn`).forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    if (confirm('Mark as completed?')) {
+                        await update(ref(database, `projects/${e.target.dataset.projectId}`), {
+                            status: 'Completed'
+                        });
+                        loadInnovatorProjects(userId);
+                    }
+                });
+            });
+        }
+    
+        async function withdrawApplication(userId, projectId) {
+            try {
+                const applicationsRef = ref(database, 'applications');
+                const snapshot = await get(applicationsRef);
+                if (snapshot.exists()) {
+                    const applications = snapshot.val();
+                    const applicationId = Object.keys(applications).find(
+                        key => applications[key].projectId === projectId && 
+                              applications[key].studentId === userId
+                    );
+                    if (applicationId) {
+                        await remove(ref(database, `applications/${applicationId}`));
+                        loadCreatorProjects(userId);
+                        alert('Application withdrawn successfully');
+                    } else {
+                        alert('No application found to withdraw');
+                    }
+                } else {
+                    alert('No applications found');
+                }
+            } catch (error) {
+                console.error('Error withdrawing application:', error);
+                alert('Error withdrawing application: ' + error.message);
+            }
+        }
+    
+        function showNoProjects() {
+            document.getElementById('pastProjectsList').innerHTML = '<li class="no-projects">No projects found</li>';
+            document.getElementById('currentProjectsList').innerHTML = '<li class="no-projects">No projects found</li>';
+            document.getElementById('appliedProjectsList').innerHTML = '<li class="no-projects">No projects found</li>';
+            document.getElementById('openProjectsList').innerHTML = '<li class="no-projects">No projects found</li>';
+            document.getElementById('inProgressProjectsList').innerHTML = '<li class="no-projects">No projects found</li>';
+            document.getElementById('completedProjectsList').innerHTML = '<li class="no-projects">No projects found</li>';
+        }
+    
+        function showError() {
+            const errorHTML = '<li style="color: #ff4d4d;">Error loading projects</li>';
+            document.getElementById('pastProjectsList').innerHTML = errorHTML;
+            document.getElementById('currentProjectsList').innerHTML = errorHTML;
+            document.getElementById('appliedProjectsList').innerHTML = errorHTML;
+            document.getElementById('openProjectsList').innerHTML = errorHTML;
+            document.getElementById('inProgressProjectsList').innerHTML = errorHTML;
+            document.getElementById('completedProjectsList').innerHTML = errorHTML;
+        }
+    
+        // Main profile loading
+        let userId;
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+    
+            userId = user.uid;
+            const userType = localStorage.getItem('userType');
+    
+            if (!userType) {
+                window.location.href = 'login.html';
+                return;
+            }
+    
+            const userRef = ref(database, `users/${userId}`);
+            get(userRef).then((snapshot) => {
+                if (!snapshot.exists()) {
+                    document.getElementById('infoDetails').innerHTML = '<div>User data not found</div>';
+                    return;
+                }
+    
+                const userData = snapshot.val();
+                const infoTitle = document.getElementById('infoTitle');
+                const infoDetails = document.getElementById('infoDetails');
+    
+                if (userType === 'creator') {
+                    infoTitle.textContent = "Creator Information";
+                    infoDetails.innerHTML = `
+                        <p><strong>Name:</strong> ${userData.fullName || 'Not provided'}</p>
+                        <p><strong>Email:</strong> ${userData.email || 'Not provided'}</p>
+                        <p><strong>Contact:</strong> ${userData.contactDetails || 'Not provided'}</p>
+                        <p><strong>Skills:</strong> ${userData.skills ? userData.skills.join(', ') : 'None'}</p>
+                        <p><strong>Experience:</strong> ${userData.experience || 'Not provided'}</p>
+                        <p><strong>Availability:</strong> ${userData.availability ? `${userData.availability} hours/week` : 'Not provided'}</p>
+                        <p><strong>Motivation:</strong> ${userData.motivation || 'Not provided'}</p>
+                        <p><strong>Resume:</strong> ${userData.resumeLink ? `<a href="${userData.resumeLink}" target="_blank">View Resume</a>` : 'Not provided'}</p>
+                        <p><strong>Portfolio:</strong> ${userData.portfolioLink ? `<a href="${userData.portfolioLink}" target="_blank">View Portfolio</a>` : 'Not provided'}</p>
+                        <p><strong>LinkedIn:</strong> ${userData.linkedinLink ? `<a href="${userData.linkedinLink}" target="_blank">View LinkedIn</a>` : 'Not provided'}</p>
+                        <p><strong>GitHub:</strong> ${userData.githubLink ? `<a href="${userData.githubLink}" target="_blank">View GitHub</a>` : 'Not provided'}</p>
+                    `;
+                    document.getElementById('pastProjects').style.display = 'block';
+                    document.getElementById('currentProjects').style.display = 'block';
+                    document.getElementById('appliedProjects').style.display = 'block';
+                    loadCreatorProjects(userId);
+    
+                } else if (userType === 'innovator') {
+                    infoTitle.textContent = "Company Details";
+                    infoDetails.innerHTML = `
+                        <p><strong>Company Name:</strong> ${userData.companyName || 'Not provided'}</p>
+                        <p><strong>Email:</strong> ${userData.email || 'Not provided'}</p>
+                        <p><strong>Contact:</strong> ${userData.contactDetails || 'Not provided'}</p>
+                        <p><strong>Industry:</strong> ${userData.industry || 'Not provided'}</p>
+                        <p><strong>Description:</strong> ${userData.companyDescription || 'Not provided'}</p>
+                        <p><strong>Website:</strong> ${userData.companyWebsite ? `<a href="${userData.companyWebsite}" target="_blank">Visit Website</a>` : 'Not provided'}</p>
+                    `;
+                    document.getElementById('uploadedProjects').style.display = 'block';
+                    loadInnovatorProjects(userId);
+                }
+            }).catch(error => {
+                console.error('Error fetching user data:', error);
+                document.getElementById('infoDetails').innerHTML = '<div>Error loading user data</div>';
+            });
+        });
+    
+        // Back button functionality
+        document.getElementById('backBtn').addEventListener('click', () => {
+            window.history.back();
+        });
+    </script>
+</body>
+</html>

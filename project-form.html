@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taskora | Submit a New Project</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --neon-blue: #00f3ff;
+            --cyber-purple: #bc13fe;
+            --matrix-green: #00ff41;
+            --dark-bg: #0a0a0f;
+            --card-bg: rgba(15, 15, 25, 0.9);
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --gradient-1: linear-gradient(135deg, var(--neon-blue), var(--cyber-purple));
+            --gradient-2: linear-gradient(45deg, var(--matrix-green), var(--neon-blue));
+            --error-red: #ff4d4d;
+            --optional-color: #ff9900;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            background: var(--dark-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gradient-1);
+            border-radius: 4px;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .delay-1 { transition-delay: 0.2s; }
+        .delay-2 { transition-delay: 0.4s; }
+        .delay-3 { transition-delay: 0.6s; }
+
+        .glow {
+            text-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue), 0 0 30px var(--neon-blue);
+            animation: glitch 1.5s linear infinite alternate;
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        @keyframes glitch {
+            0%, 100% { text-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue), 0 0 30px var(--neon-blue); }
+            50% { text-shadow: 0 0 5px var(--cyber-purple), 2px 2px 15px var(--matrix-green); }
+        }
+
+        .gradient-text {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 52px;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 243, 255, 0.1);
+            z-index: 1000;
+            padding: 0.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            position: relative;
+            padding: 0.2rem 0;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-shadow: 0 0 5px rgba(0, 243, 255, 0.2);
+            font-size: 0.9rem;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-1);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .hamburger {
+            display: none;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--neon-blue);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1002;
+            padding: 0.3rem;
+        }
+
+        .hamburger:hover {
+            color: var(--matrix-green);
+            transform: rotate(90deg);
+        }
+
+        .contact-button {
+            background: var(--gradient-1);
+            color: var(--dark-bg);
+            padding: 0.4rem 1.2rem;
+            border: 2px solid var(--neon-blue);
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            font-size: 0.8rem;
+            text-decoration: none;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .contact-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 243, 255, 0.2);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .contact-button:hover::before {
+            left: 0;
+        }
+
+        .contact-button:hover {
+            background: var(--gradient-2);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        .contact-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 243, 255, 0.5);
+        }
+
+        .mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(5px);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: 5rem auto 2rem;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 1rem;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.1);
+        }
+
+        #projectForm {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            color: var(--neon-blue);
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-shadow: 0 0 5px rgba(0, 243, 255, 0.3);
+        }
+
+        .form-label.optional {
+            color: var(--optional-color);
+        }
+
+        .form-label i {
+            margin-right: 0.5rem;
+            color: var(--matrix-green);
+        }
+
+        .form-control {
+            background: rgba(20, 20, 30, 0.8);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 0 5px rgba(0, 243, 255, 0.1);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+        }
+
+        .form-control::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.7;
+        }
+
+        .form-control[readonly] {
+            background: rgba(20, 20, 30, 0.95);
+            cursor: not-allowed;
+            opacity: 0.9;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            background: var(--gradient-1);
+            color: var(--dark-bg);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+            opacity: 1; /* Ensure visibility by default */
+        }
+
+        .btn:hover {
+            background: var(--gradient-2);
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #ff4d4d, #ff1a1a);
+            opacity: 1; /* Ensure visibility by default */
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #ff1a1a, #ff4d4d);
+        }
+
+        .form-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+            opacity: 1; /* Ensure container is visible */
+        }
+
+        .budget-container {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .budget-currency {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .budget-currency label {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            cursor: pointer;
+        }
+
+        .custom-budget {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            width: 100%;
+        }
+
+        .custom-budget input {
+            flex: 1;
+        }
+
+        @media (max-width: 768px) {
+            .form-container { margin: 4rem 1rem 1rem; padding: 1.5rem; }
+            .glow { font-size: 2.5rem; }
+            .gradient-text { font-size: 1.3rem; }
+            nav { padding: 0.5rem 1rem; }
+            .logo { font-size: 1.3rem; }
+            .hamburger { display: block; }
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                max-width: 300px;
+                height: 100vh;
+                background: linear-gradient(135deg, rgba(15, 15, 25, 0.95), rgba(25, 25, 35, 0.95));
+                flex-direction: column;
+                padding: 4rem 1rem;
+                transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                z-index: 1001;
+                box-shadow: -5px 0 15px rgba(0, 243, 255, 0.1);
+                border-left: 1px solid var(--neon-blue);
+            }
+
+            .nav-links.active { right: 0; }
+            .nav-links a {
+                font-size: 1.3rem;
+                padding: 0.8rem 1rem;
+                width: 100%;
+                border-bottom: 1px solid rgba(0, 243, 255, 0.1);
+            }
+
+            .desktop-contact { display: none; }
+            .mobile-contact {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                margin-top: 1.5rem;
+                padding: 0 1rem;
+            }
+
+            .mobile-contact a {
+                width: 100%;
+                padding: 0.8rem;
+                font-size: 1rem;
+                text-align: center;
+            }
+
+            .budget-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .custom-budget {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .glow { font-size: 2rem; }
+            .gradient-text { font-size: 1.2rem; }
+            .form-container { padding: 1rem; }
+            .form-label { font-size: 1rem; }
+            .form-control { padding: 0.6rem; font-size: 0.9rem; }
+            .btn { padding: 0.6rem 1rem; }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-contact { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">Taskora</div>
+        <button class="hamburger" aria-label="Toggle Menu"><i class="fas fa-bars"></i></button>
+        <div class="nav-links" id="navLinks">
+            <a href="main.html">Home</a>
+            <a href="available-projects.html">Available Projects</a>
+            <a href="available-talent.html">Available Talent</a>
+            <a href="community.html">Community Forum</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+            <div id="dynamicNav"></div>
+            <div class="mobile-contact" id="mobileContact">
+                <a href="https://wa.me/918789548725" class="contact-button" target="_blank"><i class="fab fa-whatsapp"></i> Contact Us</a>
+            </div>
+        </div>
+        <div class="desktop-contact" id="desktopContact">
+            <a href="https://wa.me/918789548725" class="contact-button" target="_blank"><i class="fab fa-whatsapp"></i> Contact Us</a>
+        </div>
+        <div class="mobile-menu-overlay" id="mobileOverlay"></div>
+    </nav>
+
+    <div class="form-container fade-in">
+        <h1 class="glow">Submit a New Project</h1>
+        <p class="gradient-text">Create an exciting opportunity for students</p>
+
+        <form id="projectForm" class="fade-in delay-1">
+            <div class="form-group">
+                <label class="form-label" for="projectTitle"><i class="fas fa-heading"></i> Project Title</label>
+                <input type="text" class="form-control" id="projectTitle" placeholder="e.g., Data Analysis Project" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="goal"><i class="fas fa-bullseye"></i> Project Goal</label>
+                <textarea class="form-control" id="goal" rows="4" placeholder="e.g., Analyze datasets to uncover trends" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label optional" for="audience"><i class="fas fa-users"></i> Target Audience</label>
+                <input type="text" class="form-control" id="audience" placeholder="e.g., Small business owners">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="description"><i class="fas fa-info-circle"></i> Project Description</label>
+                <textarea class="form-control" id="description" rows="4" placeholder="Describe the project in detail" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label optional" for="skills"><i class="fas fa-tools"></i> Skills Required</label>
+                <input type="text" class="form-control" id="skills" placeholder="e.g., Python, Excel, SQL">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label optional" for="specifications"><i class="fas fa-cogs"></i> Technical Specifications</label>
+                <textarea class="form-control" id="specifications" rows="3" placeholder="e.g., Use Python, integrate with Google Sheets"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="deliverables"><i class="fas fa-check-circle"></i> Expected Deliverables</label>
+                <textarea class="form-control" id="deliverables" rows="3" placeholder="e.g., A detailed report with visualizations" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="startup"><i class="fas fa-building"></i> Startup Name</label>
+                <input type="text" class="form-control" id="startup" readonly required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label optional" for="location"><i class="fas fa-map-marker-alt"></i> Location</label>
+                <input type="text" class="form-control" id="location" placeholder="e.g., Remote">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="duration"><i class="fas fa-clock"></i> Duration</label>
+                <input type="text" class="form-control" id="duration" placeholder="e.g., 4 months" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="startDate"><i class="fas fa-calendar-alt"></i> Preferred Start Date</label>
+                <input type="date" class="form-control" id="startDate" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="deadline"><i class="fas fa-hourglass-end"></i> Application Deadline</label>
+                <input type="date" class="form-control" id="deadline" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label optional" for="timeCommitment"><i class="fas fa-clock"></i> Time Commitment (Hours per Week)</label>
+                <input type="number" class="form-control" id="timeCommitment" min="1" placeholder="e.g., 10">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label optional" for="openings"><i class="fas fa-users"></i> Number of Openings</label>
+                <input type="number" class="form-control" id="openings" min="1" placeholder="e.g., 2">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label optional" for="compensation"><i class="fas fa-money-bill-wave"></i> Compensation</label>
+                <input type="text" class="form-control" id="compensation" placeholder="e.g., Certificate & Stipend">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="budget"><i class="fas fa-money-bill-wave"></i> Budget</label>
+                <div class="budget-container">
+                    <div class="custom-budget">
+                        <input type="number" class="form-control" id="budgetAmount" placeholder="Enter amount" required>
+                        <div class="budget-currency">
+                            <label><input type="radio" name="currency" value="USD" checked> $ USD</label>
+                            <label><input type="radio" name="currency" value="INR"> ₹ INR</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label optional" for="paymentTerms"><i class="fas fa-handshake"></i> Payment Terms</label>
+                <input type="text" class="form-control" id="paymentTerms" placeholder="e.g., 50% upfront, 50% on completion">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label optional" for="resources"><i class="fas fa-folder-open"></i> Provided Resources</label>
+                <textarea class="form-control" id="resources" rows="3" placeholder="e.g., API keys, datasets"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label optional" for="videoLink"><i class="fas fa-video"></i> Explanation Video Link (Google Drive)</label>
+                <input type="url" class="form-control" id="videoLink" placeholder="e.g., https://drive.google.com/file/d/xyz">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label optional" for="referenceLinks"><i class="fas fa-link"></i> Reference Links</label>
+                <textarea class="form-control" id="referenceLinks" rows="3" placeholder="e.g., https://example.com, https://docs.google.com"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label optional" for="communication"><i class="fas fa-comments"></i> Preferred Communication</label>
+                <input type="text" class="form-control" id="communication" placeholder="e.g., Slack, weekly updates">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="contact"><i class="fas fa-envelope"></i> Contact Information</label>
+                <input type="text" class="form-control" id="contact" value="WhatsApp: 918789548725" readonly required>
+            </div>
+
+            <div class="form-buttons">
+                <button type="submit" class="btn"><i class="fas fa-paper-plane"></i> Submit Project</button>
+                <button type="button" class="btn btn-secondary" onclick="window.location.href='index.html'"><i class="fas fa-arrow-left"></i> Back</button>
+            </div>
+        </form>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+        import { getDatabase, ref, push, set, get } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD0wtET8bTtw_133RE4rWZiRFGESfbDtC0",
+            authDomain: "student-startup-connect.firebaseapp.com",
+            databaseURL: "https://student-startup-connect-default-rtdb.firebaseio.com",
+            projectId: "student-startup-connect",
+            storageBucket: "student-startup-connect.firebasestorage.app",
+            messagingSenderId: "570854385529",
+            appId: "1:570854385529:web:e45e5076a0cbcb9a56f1a8",
+            measurementId: "G-T5PMGL8K26"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const database = getDatabase(app);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('#navLinks');
+            const mobileOverlay = document.querySelector('#mobileOverlay');
+            const body = document.body;
+
+            hamburger.addEventListener('click', () => {
+                const isOpen = navLinks.classList.toggle('active');
+                mobileOverlay.classList.toggle('active', isOpen);
+                hamburger.innerHTML = isOpen ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+                body.style.overflow = isOpen ? 'hidden' : '';
+            });
+
+            mobileOverlay.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileOverlay.classList.remove('active');
+                hamburger.innerHTML = '<i class="fas fa-bars"></i>';
+                body.style.overflow = '';
+            });
+
+            const fadeElements = document.querySelectorAll('.fade-in');
+            const fadeInOnScroll = () => {
+                fadeElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    if (elementTop < windowHeight - 100) {
+                        element.classList.add('visible');
+                        console.log('Fade-in triggered for:', element); // Debug line
+                    }
+                });
+            };
+            window.addEventListener('scroll', fadeInOnScroll);
+            window.addEventListener('load', fadeInOnScroll);
+            fadeInOnScroll();
+        });
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const userRef = ref(database, `users/${user.uid}`);
+                get(userRef).then((snapshot) => {
+                    if (snapshot.exists()) {
+                        const data = snapshot.val();
+                        const startupInput = document.getElementById('startup');
+                        startupInput.value = data.companyName || 'Unknown Startup';
+                        startupInput.disabled = true;
+                        document.getElementById('contact').value = 'WhatsApp: 918789548725';
+                    } else {
+                        alert('User data not found. Please complete your profile.');
+                        window.location.href = 'startup-form.html';
+                    }
+                }).catch(error => {
+                    alert('Error fetching startup data: ' + error.message);
+                });
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
+
+        document.getElementById('projectForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const user = auth.currentUser;
+            if (!user) {
+                alert('Please log in to submit a project');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const currency = document.querySelector('input[name="currency"]:checked').value;
+            const budgetAmount = document.getElementById('budgetAmount').value;
+
+            const formData = {
+                projectTitle: document.getElementById('projectTitle').value,
+                goal: document.getElementById('goal').value,
+                audience: document.getElementById('audience').value || 'Not specified',
+                description: document.getElementById('description').value,
+                skills: document.getElementById('skills').value || 'Not specified',
+                specifications: document.getElementById('specifications').value || 'Not specified',
+                deliverables: document.getElementById('deliverables').value,
+                startup: document.getElementById('startup').value,
+                location: document.getElementById('location').value || 'Not specified',
+                duration: document.getElementById('duration').value,
+                startDate: document.getElementById('startDate').value,
+                deadline: document.getElementById('deadline').value,
+                timeCommitment: document.getElementById('timeCommitment').value || 'Not specified',
+                openings: document.getElementById('openings').value || 'Not specified',
+                compensation: document.getElementById('compensation').value || 'Not specified',
+                budget: `${budgetAmount} ${currency}`,
+                paymentTerms: document.getElementById('paymentTerms').value || 'Not specified',
+                resources: document.getElementById('resources').value || 'Not specified',
+                videoLink: document.getElementById('videoLink').value || 'Not provided',
+                referenceLinks: document.getElementById('referenceLinks').value || 'Not provided',
+                communication: document.getElementById('communication').value || 'Not specified',
+                contact: document.getElementById('contact').value,
+                postedBy: user.uid,
+                timestamp: Date.now(),
+                confirmed: false,
+                status: 'Open'
+            };
+
+            try {
+                const newProjectRef = push(ref(database, 'projects'));
+                await set(newProjectRef, formData);
+                alert('Project submitted successfully! It will be visible once confirmed by an admin.');
+                window.location.href = 'profile.html';
+            } catch (error) {
+                console.error('Error submitting project:', error);
+                alert('Error submitting project: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>

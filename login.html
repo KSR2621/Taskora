@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Taskora</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --neon-blue: #00f3ff;
+            --cyber-purple: #bc13fe;
+            --matrix-green: #00ff41;
+            --dark-bg: #0a0a0f;
+            --card-bg: rgba(15, 15, 25, 0.9);
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --gradient-1: linear-gradient(135deg, var(--neon-blue), var(--cyber-purple));
+            --gradient-2: linear-gradient(45deg, var(--matrix-green), var(--neon-blue));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at 50% 50%, rgba(11, 11, 25, 0.9) 0%, var(--dark-bg) 100%);
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            max-width: 600px;
+            width: 100%;
+            margin: 2rem auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.3);
+            border-color: var(--neon-blue);
+        }
+
+        .glass-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-1);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .glass-card:hover::after {
+            transform: scaleX(1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            position: relative;
+            margin-bottom: 0.75rem;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        }
+
+        .header h1::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--gradient-1);
+            border-radius: 2px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        .form-group {
+            margin-bottom: 1.75rem;
+            position: relative;
+        }
+
+        .form-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 5px rgba(0, 243, 255, 0.2);
+        }
+
+        .form-label i {
+            color: var(--neon-blue);
+            transition: all 0.3s ease;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 18px;
+            font-size: 1rem;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            border-radius: 12px;
+            background: rgba(15, 15, 25, 0.7);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            box-shadow: 0 0 5px rgba(0, 243, 255, 0.1);
+            position: relative;
+        }
+
+        .form-control:focus {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px var(--neon-blue);
+            outline: none;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+
+        .toggle-password:hover {
+            color: var(--neon-blue);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid var(--neon-blue);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: var(--dark-bg);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: var(--gradient-2);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+        }
+
+        .btn-info {
+            background: var(--gradient-2);
+            color: var(--dark-bg);
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
+        }
+
+        .btn-info:hover {
+            background: var(--gradient-1);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+        }
+
+        .forgot-password {
+            transition: all 0.3s ease;
+            color: var(--neon-blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .forgot-password:hover {
+            color: var(--matrix-green);
+            transform: translateX(2px);
+            text-shadow: 0 0 10px var(--matrix-green);
+        }
+
+        @media (max-width: 768px) {
+            .glass-card {
+                padding: 30px;
+                max-width: 500px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .header p {
+                font-size: 1rem;
+            }
+
+            .form-control {
+                padding: 10px 15px;
+            }
+
+            .btn {
+                padding: 10px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .glass-card {
+                padding: 20px;
+                max-width: 100%;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .header p {
+                font-size: 0.9rem;
+            }
+
+            .form-control {
+                padding: 8px 12px;
+            }
+
+            .btn {
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="glass-card">
+            <div class="header">
+                <h1>Welcome Back</h1>
+                <p>Sign in to your account</p>
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label" for="email">
+                        <i class="fas fa-envelope"></i>
+                        Email Address
+                    </label>
+                    <input type="email" class="form-control" id="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">
+                        <i class="fas fa-lock"></i>
+                        Password
+                    </label>
+                    <div class="password-container">
+                        <input type="password" class="form-control" id="password" required>
+                        <i class="fas fa-eye toggle-password" id="togglePassword"></i>
+                    </div>
+                </div>
+
+                <div class="form-group" style="display: flex; justify-content: space-between; align-items: center;">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                        <input type="checkbox" id="rememberMe">
+                        <span>Remember me</span>
+                    </label>
+                    <a href="reset-password.html" class="forgot-password" style="color: var(--neon-blue); text-decoration: none; font-weight: 500;">
+                        Forgot Password?
+                    </a>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Sign In
+                </button>
+            </form>
+
+            <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(0, 243, 255, 0.1);">
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">Don't have an account?</p>
+                <a href="signup.html" class="btn btn-info" style="width: 100%; justify-content: center;">
+                    <i class="fas fa-user-plus"></i>
+                    Create Account
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+        import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+        import { getDatabase, ref, get } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD0wtET8bTtw_133RE4rWZiRFGESfbDtC0",
+            authDomain: "student-startup-connect.firebaseapp.com",
+            databaseURL: "https://student-startup-connect-default-rtdb.firebaseio.com",
+            projectId: "student-startup-connect",
+            storageBucket: "student-startup-connect.firebasestorage.app",
+            messagingSenderId: "570854385529",
+            appId: "1:570854385529:web:e45e5076a0cbcb9a56f1a8",
+            measurementId: "G-T5PMGL8K26"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const database = getDatabase(app);
+
+        // Password toggle functionality
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                const userRef = ref(database, `users/${user.uid}`);
+                const snapshot = await get(userRef);
+                
+                if (snapshot.exists()) {
+                    const userData = snapshot.val();
+                    
+                    // Store user data in localStorage
+                    localStorage.setItem('userId', user.uid);
+                    localStorage.setItem('userType', userData.userType);
+                    localStorage.setItem('isConfirmed', userData.confirmed ? 'true' : 'false');
+                    localStorage.setItem('userName', userData.firstName ? userData.firstName : userData.companyName);
+                    
+                    if (rememberMe) {
+                        localStorage.setItem('rememberMe', 'true');
+                    }
+
+                    // Redirect to main.html after successful login
+                    window.location.href = 'main.html';
+                } else {
+                    throw new Error('User data not found');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                alert(error.message);
+            }
+        });
+
+        // Check for remember me on page load
+        if (localStorage.getItem('rememberMe') === 'true' && localStorage.getItem('userId')) {
+            window.location.href = 'main.html';
+        }
+    </script>
+</body>
+</html>
