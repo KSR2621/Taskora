@@ -126,7 +126,7 @@
             position: fixed;
             top: 0;
             width: 100%;
-            height: 48px; /* Set nav bar height to approximately 1.3 cm (48px) */
+            height: 48px;
             background: var(--nav-bg);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(0, 243, 255, 0.2);
@@ -532,6 +532,61 @@
             visibility: visible;
         }
 
+        /* TechUdaan Button Styles */
+        .techudaan-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            overflow: hidden;
+        }
+
+        .techudaan-btn::before {
+            content: 'TechUdaan';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            opacity: 0;
+            border-radius: 50%;
+        }
+
+        .techudaan-btn:hover::before {
+            font-size: 14px;
+            opacity: 1;
+        }
+
+        .techudaan-btn:hover i {
+            opacity: 0;
+        }
+
+        .techudaan-btn i {
+            transition: all 0.3s ease;
+        }
+
+        .techudaan-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.8);
+        }
+
         @media (max-width: 768px) {
             body {
                 overflow-x: hidden;
@@ -700,6 +755,23 @@
             .delay-2 { transition-delay: 0.4s; }
             .delay-3 { transition-delay: 0.6s; }
             .delay-4 { transition-delay: 0.8s; }
+
+            /* Mobile styles for TechUdaan button */
+            .techudaan-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .techudaan-btn::before {
+                font-size: 0;
+            }
+
+            .techudaan-btn:hover::before {
+                font-size: 10px;
+            }
         }
 
         @media (min-width: 769px) {
@@ -814,6 +886,11 @@
             <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
         </div>
     </footer>
+
+    <!-- TechUdaan floating button -->
+    <a href="https://teachudaan.com" class="techudaan-btn" aria-label="TechUdaan">
+        <i class="fas fa-graduation-cap"></i>
+    </a>
 
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
