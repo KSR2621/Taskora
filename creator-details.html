@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creator Details - Taskora</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --neon-blue: #00f3ff;
+            --cyber-purple: #bc13fe;
+            --matrix-green: #00ff41;
+            --dark-bg: #0a0a0f;
+            --card-bg: rgba(15, 15, 25, 0.9);
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --gradient-1: linear-gradient(135deg, var(--neon-blue), var(--cyber-purple));
+            --gradient-2: linear-gradient(45deg, var(--matrix-green), var(--neon-blue));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: radial-gradient(circle at 50% 50%, rgba(11, 11, 25, 0.9) 0%, var(--dark-bg) 100%);
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            background: var(--dark-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gradient-1);
+            border-radius: 4px;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 52px;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 243, 255, 0.1);
+            z-index: 1000;
+            padding: 0.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            position: relative;
+            padding: 0.2rem 0;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-shadow: 0 0 5px rgba(0, 243, 255, 0.2);
+            font-size: 0.9rem;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-1);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .hamburger {
+            display: none;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--neon-blue);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1002;
+            padding: 0.3rem;
+        }
+
+        .hamburger:hover {
+            color: var(--matrix-green);
+            transform: rotate(90deg);
+        }
+
+        .auth-buttons button {
+            background: var(--gradient-1);
+            color: var(--dark-bg);
+            padding: 0.4rem 1.2rem;
+            border: 2px solid var(--neon-blue);
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-size: 0.8rem;
+        }
+
+        .auth-buttons button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 243, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .auth-buttons button:hover::before {
+            left: 0;
+        }
+
+        .auth-buttons button:hover {
+            background: var(--gradient-2);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        .mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(5px);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .container {
+            width: 100%;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            max-width: 600px;
+            width: 100%;
+            margin: 2rem auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.3);
+            border-color: var(--neon-blue);
+        }
+
+        .glass-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-1);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .glass-card:hover::after {
+            transform: scaleX(1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h2 {
+            font-size: 2.5rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            position: relative;
+            margin-bottom: 0.75rem;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        }
+
+        .header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--gradient-1);
+            border-radius: 2px;
+        }
+
+        .student-details p {
+            font-size: 0.95rem;
+            margin: 10px 0;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .student-details p strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .student-details a {
+            color: var(--neon-blue);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 5px rgba(0, 243, 255, 0.3);
+        }
+
+        .student-details a:hover {
+            color: var(--matrix-green);
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+        }
+
+        .no-data {
+            color: var(--text-secondary);
+            font-style: italic;
+            font-size: 1.1rem;
+            text-shadow: 0 0 5px rgba(0, 243, 255, 0.2);
+            text-align: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid var(--neon-blue);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: var(--dark-bg);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: var(--gradient-2);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+        }
+
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            color: var(--dark-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+            border: none;
+        }
+
+        .scroll-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-to-top:hover {
+            background: var(--gradient-2);
+            transform: translateY(-3px);
+        }
+
+        footer {
+            background: linear-gradient(135deg, rgba(10, 10, 15, 0.95), rgba(20, 20, 30, 0.95));
+            color: var(--text-primary);
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 1px solid rgba(0, 243, 255, 0.1);
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-1);
+        }
+
+        footer p {
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 0 5px rgba(0, 243, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 0.5rem 1rem;
+                height: 52px;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                max-width: 300px;
+                height: 100vh;
+                background: linear-gradient(135deg, rgba(15, 15, 25, 0.95), rgba(25, 25, 35, 0.95));
+                flex-direction: column;
+                padding: 4rem 1rem;
+                transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                z-index: 1001;
+                box-shadow: -5px 0 15px rgba(0, 243, 255, 0.1);
+                border-left: 1px solid var(--neon-blue);
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links a {
+                font-size: 1.3rem;
+                padding: 0.8rem 1rem;
+                width: 100%;
+                border-bottom: 1px solid rgba(0, 243, 255, 0.1);
+            }
+
+            .desktop-auth {
+                display: none;
+            }
+
+            .mobile-auth {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                margin-top: 1.5rem;
+                padding: 0 1rem;
+            }
+
+            .mobile-auth button {
+                width: 100%;
+                padding: 0.8rem;
+                font-size: 1rem;
+            }
+
+            .logo {
+                font-size: 1.3rem;
+            }
+
+            .glass-card {
+                padding: 30px;
+                max-width: 500px;
+            }
+
+            .header h2 {
+                font-size: 2rem;
+            }
+
+            .student-details p {
+                font-size: 0.9rem;
+                margin: 8px 0;
+            }
+
+            .no-data {
+                font-size: 1rem;
+            }
+
+            .btn {
+                padding: 10px 20px;
+            }
+
+            .scroll-to-top {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .glass-card {
+                padding: 20px;
+                max-width: 100%;
+            }
+
+            .header h2 {
+                font-size: 1.8rem;
+            }
+
+            .student-details p {
+                font-size: 0.85rem;
+                margin: 6px 0;
+            }
+
+            .no-data {
+                font-size: 0.9rem;
+            }
+
+            .btn {
+                padding: 8px 16px;
+            }
+
+            footer {
+                padding: 20px 10px;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-auth {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">Taskora</div>
+        <button class="hamburger" aria-label="Toggle Menu"><i class="fas fa-bars"></i></button>
+        <div class="nav-links" id="navLinks">
+            <a href="index.html">Home</a>
+            <a href="available-projects.html">Available Projects</a>
+            <a href="available-talent.html">Available Talent</a>
+            <a href="community.html">Community Forum</a>
+            <div id="dynamicNav"></div>
+            <div class="auth-buttons mobile-auth" id="mobileAuth">
+                <button class="login-btn">Login</button>
+                <button class="signup-btn">Sign Up</button>
+            </div>
+        </div>
+        <div class="auth-buttons desktop-auth" id="desktopAuth">
+            <button class="login-btn">Login</button>
+            <button class="signup-btn">Sign Up</button>
+        </div>
+        <div class="mobile-menu-overlay" id="mobileOverlay"></div>
+    </nav>
+
+    <div class="container">
+        <div class="glass-card">
+            <div class="header">
+                <h2>Creator Profile</h2>
+            </div>
+            <div class="student-details" id="studentDetails">
+                <p>Loading creator details...</p>
+            </div>
+            <a href="available-talent.html" class="btn btn-primary">Back to Talent</a>
+        </div>
+    </div>
+
+    <div class="scroll-to-top" id="scrollToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <footer>
+        <p>© 2025 Taskora. All Rights Reserved.</p>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+        import { getDatabase, ref, get } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+        import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD0wtET8bTtw_133RE4rWZiRFGESfbDtC0",
+            authDomain: "student-startup-connect.firebaseapp.com",
+            databaseURL: "https://student-startup-connect-default-rtdb.firebaseio.com",
+            projectId: "student-startup-connect",
+            storageBucket: "student-startup-connect.firebasestorage.app",
+            messagingSenderId: "570854385529",
+            appId: "1:570854385529:web:e45e5076a0cbcb9a56f1a8",
+            measurementId: "G-T5PMGL8K26"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const database = getDatabase(app);
+        const analytics = getAnalytics(app);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('#navLinks');
+            const mobileOverlay = document.querySelector('#mobileOverlay');
+            const desktopAuth = document.getElementById('desktopAuth');
+            const mobileAuth = document.getElementById('mobileAuth');
+            const scrollToTopBtn = document.getElementById('scrollToTop');
+
+            const toggleMenu = () => {
+                const isOpen = navLinks.classList.toggle('active');
+                mobileOverlay.classList.toggle('active', isOpen);
+                hamburger.innerHTML = isOpen ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+                document.body.style.overflow = isOpen ? 'hidden' : '';
+            };
+
+            hamburger.addEventListener('click', toggleMenu);
+            mobileOverlay.addEventListener('click', toggleMenu);
+
+            document.querySelectorAll('.nav-links a').forEach(item => {
+                item.addEventListener('click', () => {
+                    if (window.innerWidth <= 768) {
+                        navLinks.classList.remove('active');
+                        mobileOverlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
+            });
+
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    scrollToTopBtn.classList.add('visible');
+                } else {
+                    scrollToTopBtn.classList.remove('visible');
+                }
+            });
+
+            scrollToTopBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    const profileButtonHTML = `<button class="profile-btn">Profile</button>`;
+                    desktopAuth.innerHTML = profileButtonHTML;
+                    mobileAuth.innerHTML = profileButtonHTML;
+
+                    document.querySelectorAll('.profile-btn').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            window.location.href = 'profile.html';
+                        });
+                    });
+                } else {
+                    const authButtonsHTML = `
+                        <button class="login-btn">Login</button>
+                        <button class="signup-btn">Sign Up</button>
+                    `;
+                    desktopAuth.innerHTML = authButtonsHTML;
+                    mobileAuth.innerHTML = authButtonsHTML;
+
+                    document.querySelectorAll('.login-btn').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            window.location.href = 'login.html';
+                        });
+                    });
+                    document.querySelectorAll('.signup-btn').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            window.location.href = 'signup.html';
+                        });
+                    });
+                }
+            });
+
+            const fetchCreatorDetails = async () => {
+                const urlParams = new URLSearchParams(window.location.search);
+                const userId = urlParams.get('userId')?.trim();
+                const creatorDetails = document.getElementById('studentDetails');
+
+                console.log('Fetching details for user ID:', userId);
+
+                creatorDetails.innerHTML = '<p>Loading creator details...</p>';
+
+                if (!userId || userId.length === 0) {
+                    console.warn('No userId provided in URL');
+                    creatorDetails.innerHTML = `
+                        <p class="no-data">No creator ID provided in URL.</p>
+                        <p>Please access this page from the Available Talent page.</p>
+                    `;
+                    return;
+                }
+
+                try {
+                    const creatorRef = ref(database, `users/${userId}`);
+                    console.log('Querying database path:', `users/${userId}`);
+                    const snapshot = await get(creatorRef);
+
+                    console.log('Firebase response:', snapshot.val());
+
+                    if (!snapshot.exists()) {
+                        console.warn('No data found for userId:', userId);
+                        creatorDetails.innerHTML = `
+                            <p class="no-data">Creator not found.</p>
+                            <p>User ID searched: ${userId}</p>
+                        `;
+                        return;
+                    }
+
+                    const creator = snapshot.val();
+                    console.log('Creator data:', creator);
+                    displayCreatorDetails(creator);
+                } catch (error) {
+                    console.error('Error fetching creator details:', error);
+                    let userMessage = 'An unexpected error occurred.';
+                    if (error.code === 'PERMISSION_DENIED') {
+                        userMessage = 'Access denied. Please log in or contact support.';
+                    } else if (error.message.includes('timeout')) {
+                        userMessage = 'Request took too long. Please check your connection.';
+                    }
+                    creatorDetails.innerHTML = `
+                        <p class="no-data">Error loading creator details.</p>
+                        <p>${userMessage}</p>
+                        <p>Try again later or contact support.</p>
+                    `;
+                }
+            };
+
+            const displayCreatorDetails = (creator) => {
+                const creatorDetails = document.getElementById('studentDetails');
+
+                const displayValue = (value, fallback = 'Not specified') => {
+                    if (Array.isArray(value)) return value.join(', ') || fallback;
+                    return value && typeof value === 'string' ? value : fallback;
+                };
+
+                const displayLink = (url, text) => {
+                    if (!url || typeof url !== 'string') return 'Not provided';
+                    const sanitizedUrl = encodeURI(url.startsWith('http') ? url : 'https://' + url);
+                    return `<a href="${sanitizedUrl}" target="_blank" rel="noopener noreferrer">${text}</a>`;
+                };
+
+                creatorDetails.innerHTML = `
+                    <p><i class="fas fa-user"></i> <strong>Name:</strong> ${displayValue(creator.fullName)}</p>
+                    <p><i class="fas fa-tools"></i> <strong>Skills:</strong> ${displayValue(creator.skills)}</p>
+                    <p><i class="fas fa-briefcase"></i> <strong>Experience:</strong> ${displayValue(creator.experience)}</p>
+                    <p><i class="fas fa-file-alt"></i> <strong>Resume:</strong> ${displayLink(creator.resumeLink, 'View Resume')}</p>
+                    <p><i class="fas fa-briefcase"></i> <strong>Portfolio:</strong> ${displayLink(creator.portfolioLink, 'View Portfolio')}</p>
+                    <p><i class="fab fa-github"></i> <strong>GitHub:</strong> ${displayLink(creator.githubLink, 'GitHub Profile')}</p>
+                    <p><i class="fab fa-linkedin"></i> <strong>LinkedIn:</strong> ${displayLink(creator.linkedinLink, 'LinkedIn Profile')}</p>
+                    <p><i class="fas fa-clock"></i> <strong>Availability:</strong> ${displayValue(creator.availability, 'Not specified')} hours/week</p>
+                    <p><i class="fas fa-heart"></i> <strong>Motivation:</strong> ${displayValue(creator.motivation)}</p>
+                    <p><i class="fas fa-check-circle"></i> <strong>Verified:</strong> ${creator.confirmed ? 'Yes' : 'No'}</p>
+                    <p><i class="fas fa-clock"></i> <strong>Member Since:</strong> ${
+                        creator.createdAt ? new Date(creator.createdAt).toLocaleDateString() : 'Unknown'
+                    }</p>
+                `;
+            };
+
+            fetchCreatorDetails();
+        });
+    </script>
+</body>
+</html>

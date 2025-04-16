@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile - Taskora</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --neon-blue: #00f3ff;
+            --cyber-purple: #bc13fe;
+            --matrix-green: #00ff41;
+            --dark-bg: #0a0a0f;
+            --card-bg: rgba(15, 15, 25, 0.9);
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --gradient-1: linear-gradient(135deg, var(--neon-blue), var(--cyber-purple));
+            --gradient-2: linear-gradient(45deg, var(--matrix-green), var(--neon-blue));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            max-width: 600px;
+            width: 100%;
+            margin: 2rem auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.3);
+            border-color: var(--neon-blue);
+        }
+
+        .glass-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-1);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .glass-card:hover::after {
+            transform: scaleX(1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h2 {
+            font-size: 2.5rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            position: relative;
+            margin-bottom: 0.75rem;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        }
+
+        .header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--gradient-1);
+            border-radius: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 1.75rem;
+            position: relative;
+        }
+
+        .form-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 5px rgba(0, 243, 255, 0.2);
+        }
+
+        .form-label i {
+            color: var(--neon-blue);
+            transition: all 0.3s ease;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 18px;
+            font-size: 1rem;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            border-radius: 12px;
+            background: rgba(15, 15, 25, 0.7);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            box-shadow: 0 0 5px rgba(0, 243, 255, 0.1);
+        }
+
+        .form-control:focus {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px var(--neon-blue);
+            outline: none;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            height: 100px;
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%2300f3ff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            cursor: pointer;
+            padding-right: 40px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid var(--neon-blue);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: var(--dark-bg);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: var(--gradient-2);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #ff4d4d, #ff1a1a);
+            color: var(--dark-bg);
+            margin-top: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #ff1a1a, #ff4d4d);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 26, 26, 0.4);
+        }
+
+        .additional-info {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .glass-card {
+                padding: 30px;
+                max-width: 500px;
+            }
+
+            .header h2 {
+                font-size: 2rem;
+            }
+
+            .form-control {
+                padding: 10px 15px;
+            }
+
+            .btn {
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="glass-card">
+            <div class="header">
+                <h2>Edit Profile</h2>
+            </div>
+
+            <form id="editProfileForm" style="margin-top: 2rem;">
+                <div class="form-group">
+                    <label class="form-label" for="email">
+                        <i class="fas fa-envelope"></i>
+                        Email Address
+                    </label>
+                    <input type="email" class="form-control" id="email" name="email" readonly>
+                </div>
+
+                <!-- Creator Fields -->
+                <div id="creatorInfo" class="additional-info">
+                    <div class="form-group">
+                        <label class="form-label" for="fullName">
+                            <i class="fas fa-user"></i>
+                            Full Name
+                        </label>
+                        <input type="text" class="form-control" id="fullName" name="fullName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="contactDetails">
+                            <i class="fas fa-phone"></i>
+                            Contact Details (Phone)
+                        </label>
+                        <input type="tel" class="form-control" id="contactDetails" name="contactDetails" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="skills">
+                            <i class="fas fa-tools"></i>
+                            Skills
+                        </label>
+                        <input type="text" class="form-control" id="skills" name="skills" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="resumeLink">
+                            <i class="fas fa-file-alt"></i>
+                            Resume Link
+                        </label>
+                        <input type="url" class="form-control" id="resumeLink" name="resumeLink">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="portfolioLink">
+                            <i class="fas fa-briefcase"></i>
+                            Portfolio Link (Optional)
+                        </label>
+                        <input type="url" class="form-control" id="portfolioLink" name="portfolioLink">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="linkedinLink">
+                            <i class="fab fa-linkedin"></i>
+                            LinkedIn Link (Optional)
+                        </label>
+                        <input type="url" class="form-control" id="linkedinLink" name="linkedinLink">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="githubLink">
+                            <i class="fab fa-github"></i>
+                            GitHub Link (Optional)
+                        </label>
+                        <input type="url" class="form-control" id="githubLink" name="githubLink">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="experience">
+                            <i class="fas fa-chart-line"></i>
+                            Experience Level
+                        </label>
+                        <select class="form-control" id="experience" name="experience" required>
+                            <option value="">Select experience level</option>
+                            <option value="Beginner">Beginner</option>
+                            <option value="Intermediate">Intermediate</option>
+                            <option value="Advanced">Advanced</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="availability">
+                            <i class="fas fa-clock"></i>
+                            Availability (Hours/Week)
+                        </label>
+                        <input type="number" class="form-control" id="availability" name="availability" min="1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="motivation">
+                            <i class="fas fa-heart"></i>
+                            Motivation to Join
+                        </label>
+                        <textarea class="form-control" id="motivation" name="motivation" required></textarea>
+                    </div>
+                </div>
+
+                <!-- Innovator Fields -->
+                <div id="innovatorInfo" class="additional-info">
+                    <div class="form-group">
+                        <label class="form-label" for="companyName">
+                            <i class="fas fa-building"></i>
+                            Company Name
+                        </label>
+                        <input type="text" class="form-control" id="companyName" name="companyName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="contactDetails">
+                            <i class="fas fa-phone"></i>
+                            Contact Details (Phone)
+                        </label>
+                        <input type="tel" class="form-control" id="contactDetails" name="contactDetails" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="companyDescription">
+                            <i class="fas fa-info-circle"></i>
+                            Company Description
+                        </label>
+                        <textarea class="form-control" id="companyDescription" name="companyDescription" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="companyWebsite">
+                            <i class="fas fa-globe"></i>
+                            Company Website Link (Optional)
+                        </label>
+                        <input type="url" class="form-control" id="companyWebsite" name="companyWebsite">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="industry">
+                            <i class="fas fa-industry"></i>
+                            Industry
+                        </label>
+                        <input type="text" class="form-control" id="industry" name="industry" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="saveChangesBtn">
+                    <i class="fas fa-save"></i>
+                    Save Changes
+                </button>
+                <button type="button" class="btn btn-secondary" id="cancelBtn">
+                    <i class="fas fa-arrow-left"></i>
+                    Cancel
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+        import { getDatabase, ref, get, update } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD0wtET8bTtw_133RE4rWZiRFGESfbDtC0",
+            authDomain: "student-startup-connect.firebaseapp.com",
+            databaseURL: "https://student-startup-connect-default-rtdb.firebaseio.com",
+            projectId: "student-startup-connect",
+            storageBucket: "student-startup-connect.appspot.com",
+            messagingSenderId: "570854385529",
+            appId: "1:570854385529:web:e45e5076a0cbcb9a56f1a8",
+            measurementId: "G-T5PMGL8K26"
+        };
+
+        // Initialize Firebase
+        try {
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+            const database = getDatabase(app);
+            console.log("Firebase initialized successfully");
+
+            let userId;
+
+            // Function to populate form with user data
+            function populateForm(userData, userType) {
+                console.log("Populating form with user data:", userData);
+                document.getElementById('email').value = userData.email || '';
+
+                if (userType === 'creator') {
+                    document.getElementById('creatorInfo').style.display = 'block';
+                    document.getElementById('fullName').value = userData.fullName || '';
+                    document.getElementById('contactDetails').value = userData.contactDetails || '';
+                    document.getElementById('skills').value = userData.skills ? userData.skills.join(', ') : '';
+                    document.getElementById('resumeLink').value = userData.resumeLink || '';
+                    document.getElementById('portfolioLink').value = userData.portfolioLink || '';
+                    document.getElementById('linkedinLink').value = userData.linkedinLink || '';
+                    document.getElementById('githubLink').value = userData.githubLink || '';
+                    document.getElementById('experience').value = userData.experience || '';
+                    document.getElementById('availability').value = userData.availability || '';
+                    document.getElementById('motivation').value = userData.motivation || '';
+                } else if (userType === 'innovator') {
+                    document.getElementById('innovatorInfo').style.display = 'block';
+                    document.getElementById('companyName').value = userData.companyName || '';
+                    document.getElementById('contactDetails').value = userData.contactDetails || '';
+                    document.getElementById('companyDescription').value = userData.companyDescription || '';
+                    document.getElementById('companyWebsite').value = userData.companyWebsite || '';
+                    document.getElementById('industry').value = userData.industry || '';
+                }
+            }
+
+            // Load user data on auth state change
+            onAuthStateChanged(auth, (user) => {
+                if (!user) {
+                    console.log("No user authenticated, redirecting to login.");
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                userId = user.uid;
+                const userType = localStorage.getItem('userType');
+
+                if (!userType) {
+                    console.log("No userType found in localStorage, redirecting to login.");
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                console.log("User authenticated:", userId, "User type:", userType);
+
+                const userRef = ref(database, `users/${userId}`);
+                get(userRef).then((snapshot) => {
+                    if (!snapshot.exists()) {
+                        console.warn("User data not found in database, creating new entry possible.");
+                        // Since rules allow write, we can proceed without existing data
+                    } else {
+                        const userData = snapshot.val();
+                        populateForm(userData, userType);
+                    }
+                }).catch((error) => {
+                    console.error('Error fetching user data:', error);
+                    alert('Error loading profile data: ' + error.message);
+                });
+            });
+
+            // Ensure DOM is loaded before attaching event listeners
+            document.addEventListener('DOMContentLoaded', () => {
+                console.log("DOM fully loaded");
+
+                const editProfileForm = document.getElementById('editProfileForm');
+                const saveChangesBtn = document.getElementById('saveChangesBtn');
+                const cancelBtn = document.getElementById('cancelBtn');
+
+                if (!editProfileForm) {
+                    console.error("Form element with ID 'editProfileForm' not found.");
+                    return;
+                }
+                if (!saveChangesBtn) {
+                    console.error("Save button with ID 'saveChangesBtn' not found.");
+                    return;
+                }
+                if (!cancelBtn) {
+                    console.error("Cancel button with ID 'cancelBtn' not found.");
+                    return;
+                }
+
+                // Minimal test to confirm button click
+                saveChangesBtn.addEventListener('click', () => {
+                    console.log("Save Changes button clicked (direct event)");
+                });
+
+                // Handle form submission
+                editProfileForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    console.log("Form submitted via Save Changes button");
+
+                    if (!userId) {
+                        console.error("User ID not set, cannot save changes.");
+                        alert('Error: User not authenticated. Please log in again.');
+                        window.location.href = 'login.html';
+                        return;
+                    }
+
+                    const userType = localStorage.getItem('userType');
+                    if (!userType) {
+                        console.error("User type not found in localStorage.");
+                        alert('Error: User type not found. Please log in again.');
+                        return;
+                    }
+
+                    let updatedData = {};
+                    console.log("User type for update:", userType);
+
+                    if (userType === 'creator') {
+                        updatedData = {
+                            fullName: document.getElementById('fullName').value || '',
+                            contactDetails: document.getElementById('contactDetails').value || '',
+                            skills: document.getElementById('skills').value ? document.getElementById('skills').value.split(',').map(skill => skill.trim()) : [],
+                            resumeLink: document.getElementById('resumeLink').value || null,
+                            portfolioLink: document.getElementById('portfolioLink').value || null,
+                            linkedinLink: document.getElementById('linkedinLink').value || null,
+                            githubLink: document.getElementById('githubLink').value || null,
+                            experience: document.getElementById('experience').value || '',
+                            availability: document.getElementById('availability').value || '',
+                            motivation: document.getElementById('motivation').value || '',
+                            userType: 'creator' // Ensure userType is saved
+                        };
+                    } else if (userType === 'innovator') {
+                        updatedData = {
+                            companyName: document.getElementById('companyName').value || '',
+                            contactDetails: document.getElementById('contactDetails').value || '',
+                            companyDescription: document.getElementById('companyDescription').value || '',
+                            companyWebsite: document.getElementById('companyWebsite').value || null,
+                            industry: document.getElementById('industry').value || '',
+                            userType: 'innovator' // Ensure userType is saved
+                        };
+                    }
+
+                    console.log("Updated data to save:", updatedData);
+
+                    try {
+                        const userRef = ref(database, `users/${userId}`);
+                        await update(userRef, updatedData);
+                        console.log("Profile updated successfully in Firebase.");
+                        alert('Profile updated successfully!');
+                        window.location.href = 'profile.html';
+                    } catch (error) {
+                        console.error('Error updating profile:', error.code, error.message);
+                        alert('Error updating profile: ' + error.message);
+                    }
+                });
+
+                // Cancel button
+                cancelBtn.addEventListener('click', () => {
+                    console.log("Cancel button clicked, redirecting to profile.");
+                    window.location.href = 'profile.html';
+                });
+            });
+        } catch (error) {
+            console.error("Error initializing Firebase:", error);
+            alert("Failed to initialize Firebase: " + error.message);
+        }
+    </script>
+</body>
+</html>

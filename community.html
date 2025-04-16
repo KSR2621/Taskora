@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taskora | Community Coming Soon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --neon-blue: #00f3ff;
+            --cyber-purple: #bc13fe;
+            --matrix-green: #00ff41;
+            --dark-bg: #0a0a0f;
+            --card-bg: rgba(15, 15, 25, 0.9);
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --gradient-1: linear-gradient(135deg, var(--neon-blue), var(--cyber-purple));
+            --gradient-2: linear-gradient(45deg, var(--matrix-green), var(--neon-blue));
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            background: var(--dark-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gradient-1);
+            border-radius: 4px;
+        }
+
+        .glow {
+            text-shadow: 0 0 10px var(--neon-blue),
+                         0 0 20px var(--neon-blue),
+                         0 0 30px var(--neon-blue);
+            animation: glitch 1.5s linear infinite alternate;
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes glitch {
+            0%, 100% { text-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue), 0 0 30px var(--neon-blue); }
+            50% { text-shadow: 0 0 5px var(--cyber-purple), 2px 2px 15px var(--matrix-green); }
+        }
+
+        .gradient-text {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 52px;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 243, 255, 0.1);
+            z-index: 1000;
+            padding: 0.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            position: relative;
+            padding: 0.2rem 0;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-shadow: 0 0 5px rgba(0, 243, 255, 0.2);
+            font-size: 0.9rem;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-1);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .hamburger {
+            display: none;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--neon-blue);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1002;
+            padding: 0.3rem;
+        }
+
+        .hamburger:hover {
+            color: var(--matrix-green);
+            transform: rotate(90deg);
+        }
+
+        .auth-buttons button {
+            background: var(--gradient-1);
+            color: var(--dark-bg);
+            padding: 0.4rem 1.2rem;
+            border: 2px solid var(--neon-blue);
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-size: 0.8rem;
+        }
+
+        .auth-buttons button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 243, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .auth-buttons button:hover::before {
+            left: 0;
+        }
+
+        .auth-buttons button:hover {
+            background: var(--gradient-2);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        .mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(5px);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .coming-soon {
+            min-height: calc(100vh - 52px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, 
+                rgba(11, 11, 25, 0.9) 0%,
+                rgba(11, 11, 25, 0.7) 50%,
+                rgba(11, 11, 25, 0.4) 100%);
+        }
+
+        .coming-soon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path fill="%2300f3ff" fill-opacity="0.2" d="M49,-50.7C62.3,-42.2,70.2,-21.1,71.9,1.7C73.6,24.5,69.1,49,55.7,60.3C42.3,71.6,20.1,69.8,-3.1,72.9C-26.3,76,-52.6,84.1,-64.9,76.2C-77.1,68.3,-75.3,44.5,-72.8,23.5C-70.3,2.5,-67.1,-15.7,-58.9,-30.3C-50.7,-44.9,-37.5,-55.9,-22.3,-63.5C-7.1,-71.1,10.1,-75.3,24.1,-71.2C38.1,-67.1,48.9,-54.7,49,-50.7Z" transform="translate(100 100)"/></svg>');
+            animation: hologram 20s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes hologram {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .coming-soon p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 1rem 0;
+        }
+
+        .notify-btn {
+            background: var(--gradient-1);
+            color: var(--dark-bg);
+            padding: 0.8rem 2rem;
+            border: 2px solid var(--neon-blue);
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-size: 1rem;
+            margin-top: 2rem;
+        }
+
+        .notify-btn:hover {
+            background: var(--gradient-2);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        @media (max-width: 768px) {
+            .glow {
+                font-size: 3.5rem;
+            }
+
+            .gradient-text {
+                font-size: 2rem;
+            }
+
+            .coming-soon p {
+                font-size: 1rem;
+            }
+
+            nav {
+                padding: 0.5rem 1rem;
+            }
+
+            .logo {
+                font-size: 1.3rem;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                max-width: 300px;
+                height: 100vh;
+                background: linear-gradient(135deg, rgba(15, 15, 25, 0.95), rgba(25, 25, 35, 0.95));
+                flex-direction: column;
+                padding: 4rem 1rem;
+                transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                z-index: 1001;
+                box-shadow: -5px 0 15px rgba(0, 243, 255, 0.1);
+                border-left: 1px solid var(--neon-blue);
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links a {
+                font-size: 1.3rem;
+                padding: 0.8rem 1rem;
+                width: 100%;
+                border-bottom: 1px solid rgba(0, 243, 255, 0.1);
+            }
+
+            .desktop-auth {
+                display: none;
+            }
+
+            .mobile-auth {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                margin-top: 1.5rem;
+                padding: 0 1rem;
+            }
+
+            .mobile-auth button {
+                width: 100%;
+                padding: 0.8rem;
+                font-size: 1rem;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-auth {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">Taskora</div>
+        <button class="hamburger" aria-label="Toggle Menu"><i class="fas fa-bars"></i></button>
+        <div class="nav-links" id="navLinks">
+            <a href="main.html">Home</a>
+            <a href="available-projects.html">Available Projects</a>
+            <a href="available-talent.html">Available Talent</a>
+          
+            <div id="dynamicNav"></div>
+            <div class="auth-buttons mobile-auth" id="mobileAuth">
+                <button class="login-btn">Login</button>
+                <button class="signup-btn">Sign Up</button>
+            </div>
+        </div>
+        <div class="auth-buttons desktop-auth" id="desktopAuth">
+            <button class="login-btn">Login</button>
+            <button class="signup-btn">Sign Up</button>
+        </div>
+        <div class="mobile-menu-overlay" id="mobileOverlay"></div>
+    </nav>
+
+    <section class="coming-soon">
+        <h1 class="glow fade-in">Community Forum</h1>
+        <h2 class="gradient-text fade-in delay-1">Coming Soon</h2>
+        <p class="fade-in delay-2">Get ready to join a vibrant community of innovators, creators, and collaborators. Our forum will be the hub for sharing ideas, asking questions, and connecting with like-minded individuals.</p>
+        
+    </section>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD0wtET8bTtw_133RE4rWZiRFGESfbDtC0",
+            authDomain: "student-startup-connect.firebaseapp.com",
+            databaseURL: "https://student-startup-connect-default-rtdb.firebaseio.com",
+            projectId: "student-startup-connect",
+            storageBucket: "student-startup-connect.firebasestorage.app",
+            messagingSenderId: "570854385529",
+            appId: "1:570854385529:web:e45e5076a0cbcb9a56f1a8",
+            measurementId: "G-T5PMGL8K26"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('#navLinks');
+            const mobileOverlay = document.querySelector('#mobileOverlay');
+            const body = document.body;
+
+            const fadeElements = document.querySelectorAll('.fade-in');
+            const fadeInOnScroll = () => {
+                fadeElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    if (elementTop < windowHeight - 100) {
+                        element.classList.add('visible');
+                    }
+                });
+            };
+            window.addEventListener('scroll', fadeInOnScroll);
+            window.addEventListener('load', fadeInOnScroll);
+            fadeInOnScroll();
+
+            hamburger.addEventListener('click', () => {
+                const isOpen = navLinks.classList.toggle('active');
+                mobileOverlay.classList.toggle('active', isOpen);
+                hamburger.innerHTML = isOpen ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+                body.style.overflow = isOpen ? 'hidden' : '';
+            });
+
+            mobileOverlay.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileOverlay.classList.remove('active');
+                hamburger.innerHTML = '<i class="fas fa-bars"></i>';
+                body.style.overflow = '';
+            });
+
+            onAuthStateChanged(auth, (user) => {
+                const desktopAuth = document.getElementById('desktopAuth');
+                const mobileAuth = document.getElementById('mobileAuth');
+
+                if (user) {
+                    const profileHTML = `<button class="profile-btn">Profile</button>`;
+                    desktopAuth.innerHTML = profileHTML;
+                    mobileAuth.innerHTML = profileHTML;
+
+                    document.querySelectorAll('.profile-btn').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            window.location.href = 'profile.html';
+                        });
+                    });
+                } else {
+                    const authButtonsHTML = `
+                        <button class="login-btn">Login</button>
+                        <button class="signup-btn">Sign Up</button>
+                    `;
+                    desktopAuth.innerHTML = authButtonsHTML;
+                    mobileAuth.innerHTML = authButtonsHTML;
+
+                    document.querySelectorAll('.login-btn').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            window.location.href = 'login.html';
+                        });
+                    });
+
+                    document.querySelectorAll('.signup-btn').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            window.location.href = 'signup.html';
+                        });
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
